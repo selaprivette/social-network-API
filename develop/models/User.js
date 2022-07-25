@@ -18,13 +18,35 @@ const { Schema, model } = require('mongoose');
 
 // * `friends`
 //   * Array of `_id` values referencing the `User` model (self-reference)
-class User extends Model {}
-User.init(
+const UserSchema = new Schema(
     {
-        id:{
-            type: DataTypes
+        username: {
+            type: String,
+            unique: true,
+            required: true,
+            trim: true,
+        },
+        email: {
+            type: String,
+            unique: true,
+            required: true,
+            // * Must match a valid email address (look into Mongoose's matching validation)
+            match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/i],
+        },
+        thoughts: [
+            {
+                type: Schema.Types.ObjectId, ref: 'Thought',
 
+            }
+        ],
+        friends: [
+           { type: Schema.Types.ObjectId, ref: 'User',
+           } 
+        ],
 
-        }
     }
 )
+
+
+const User = model('User', UserSchema);
+module.exports = User;
