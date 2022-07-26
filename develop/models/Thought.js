@@ -5,8 +5,28 @@ const ReactionSchema = new Schema({
     reactionId: {
         type: Schema.Types.ObjectId,
         default: () => new Types.ObjectId(),
-    }
-})
+    },
+    reactionBody: {
+        type: String,
+        required: true,
+        maxLength: 280,
+    },
+    username: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: timestamp => moment(timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+    },
+},
+{
+    toJSON: {
+        virtuals: true,
+    },
+}
+);
 
 
 const ThoughtSchema = new Schema({
