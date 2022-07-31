@@ -10,8 +10,8 @@ module.exports = {
            }
     },
     async createThought(req, res) {
-        const thought = await Thought.create(req.body)
-        const user = await User.findOneAndUpdate({ _id: req.params.userId }).populate({path:'thoughts'}).populate({path:'users'}); 
+        const thought = await Thought.create(req.body);
+            const user = await User.findOneAndUpdate({ username: req.body.username }, { $addToSet: { thoughts: thought._id } }, { new: true })
         if (user){
             res.json(thought)
            } else {
@@ -28,7 +28,9 @@ module.exports = {
            }
 },
 async updateThought(req, res)  {
-    const thoughts = await Thought.findOneAndUpdate({ _id: req.params.ThoughtId }).populate({path:'thoughts'})
+    await Thought.updateOne({ _id: req.params.thoughtId }, req.body, { new: true, runValidators: true });
+    const thought = await Thought.findOne({ _id: req.params.thoughtId });
+    console.log(req.params.thoughtId, thought);
     if (thought){
         res.json(thought)
        } else {
@@ -37,17 +39,18 @@ async updateThought(req, res)  {
  
 },
 async deleteThought(req, res) {
-    const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId}).populate({path:'reactions'})
+    const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId})
     if (thought){
-        res.json(thought)
+        res.json("thought deleted")
        } else {
         res.status(404).json({message: 'No thought found'});
        }
 },
 async addReaction(req,res) {
-    const thought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId}).populate({path:'reactions'})
-    if (users){
-        res.json(users)
+    await Thought.updateOne({ _id: req.params.thoughtId }, { $push: { reactions: req.body }, new: true, runValidators: true });
+            const thought = await Thought.findOne({ _id: req.params.thoughtId });
+    if (thought){
+        res.json(thought)
        } else {
         res.status(404).json({message: 'Thought not found'});
        }
