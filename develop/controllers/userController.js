@@ -16,13 +16,14 @@ async createUser(req, res) {
 async getSingleUser(req, res) {
     const users = await User.findOne({ _id: req.params.userId }).populate({ path: 'thoughts' }).populate({ path: 'friends' });
     if (users){
-        res.json(user)
+        res.json(users)
        } else {
         res.status(404).json({message: 'No user found'});
        }
 },
 async updateUser(req, res)  {
-    const users = await User.findOneAndUpdate({ _id: req.params.userId }).populate({path:'thoughts'}).populate({path:'friends'}); 
+    await User.updateOne({ _id: req.params.userId }, req.body, { new: true, runValidators: true });
+    const users = await User.findOne({ _id: req.params.userId }).populate({path:'thoughts'}).populate({path:'friends'}); 
     if (users){
         res.json(users)
        } else {
