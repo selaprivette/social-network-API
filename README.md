@@ -11,9 +11,9 @@
 An API for a social networking application where users can share thoughts, react to friends comments, and make a friend list. This application uses a NoSQL database.
 
 ## Visuals
-![Social-network-API](getAllThoughts.png)
-![Thoughts-demo](thoughtDemo.mp4) 
-![Users-demo](userDemo.mp4) 
+![Social-network-API](develop/imgs/getAllThoughts.png)
+![Thoughts-demo](develop/imgs/thoughtDemo.mp4) 
+![Users-demo](develop/imgs/userDemo.mp4) 
 
 
 
